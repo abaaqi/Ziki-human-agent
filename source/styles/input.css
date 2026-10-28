@@ -1,0 +1,35 @@
+/* Ziki's own stylesheets, unchanged, so the prototype looks like Ziki. */
+@import "./ziki/globals.css";
+@import "./ziki/issues.css";
+@import "./ziki/overview.css";
+
+@source "../src";
+
+/* Ziki loads these with next/font; here they are plain font faces. */
+@font-face {
+  font-family: "Inter";
+  src: url("/fonts/inter-latin.woff2") format("woff2");
+  font-weight: 100 900;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Manrope";
+  src: url("/fonts/manrope-latin.woff2") format("woff2");
+  font-weight: 400 800;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Geist Mono";
+  src: url("/fonts/geist-mono-latin.woff2") format("woff2");
+  font-weight: 100 900;
+  font-display: swap;
+}
+
+:root {
+  --font-inter: "Inter";
+  --font-manrope: "Manrope";
+  --font-geist-mono: "Geist Mono";
+}
+
+/* Tailwind v4 needs the dark variant pointed at Ziki's data-theme switch. */
+@custom-variant dark (&:where([data-theme="dark"], [data-theme="dark"] *));
