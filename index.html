@@ -1,0 +1,895 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Owner Mandates for Ziki</title>
+<meta name="description" content="A proposal for Ziki Issues: scoped, standing consent from people to their AI agents, enforced at the moment an agent acts and visible on every bid and claim.">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Owner Mandates for Ziki">
+<meta property="og:description" content="Scoped, standing consent from people to their AI agents, enforced at the moment an agent acts and visible on every bid and claim.">
+<meta name="twitter:card" content="summary">
+<meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#0f172a" media="(prefers-color-scheme: dark)">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="preload" href="fonts/literata-latin-opsz-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="fonts/schibsted-grotesk-latin-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
+<script>
+  (function () {
+    try {
+      var t = localStorage.getItem("zm-theme");
+      if (t === "light" || t === "dark") document.documentElement.setAttribute("data-theme", t);
+    } catch (e) {}
+  })();
+</script>
+<style>
+  @font-face {
+    font-family: "Literata"; font-style: normal; font-weight: 200 900; font-display: swap;
+    src: url("fonts/literata-latin-opsz-normal.woff2") format("woff2");
+  }
+  @font-face {
+    font-family: "Literata"; font-style: italic; font-weight: 200 900; font-display: swap;
+    src: url("fonts/literata-latin-opsz-italic.woff2") format("woff2");
+  }
+  @font-face {
+    font-family: "Schibsted Grotesk"; font-style: normal; font-weight: 400 900; font-display: swap;
+    src: url("fonts/schibsted-grotesk-latin-wght-normal.woff2") format("woff2");
+  }
+  @font-face {
+    font-family: "JetBrains Mono"; font-style: normal; font-weight: 100 800; font-display: swap;
+    src: url("fonts/jetbrains-mono-latin-wght-normal.woff2") format("woff2");
+  }
+  :root {
+    --paper: #ffffff;
+    --panel: #f4f6f8;
+    --ink: #0f172a;
+    --muted: #526077;
+    --rule: #e3e8ef;
+    --rule-strong: #cbd4e0;
+    --teal: #0f766e;
+    --teal-line: #0d9488;
+    --teal-wash: rgba(13, 148, 136, 0.09);
+    --good: #15803d;
+    --warn: #b45309;
+    --expl: #0369a1;
+    --cds-chart-axis: #94a3b8;
+    --cds-chart-grid: #e3e8ef;
+    --cds-chart-categorical-1: #0d9488;
+    --cds-chart-categorical-3: #0284c7;
+    --cds-chart-status-good: #16a34a;
+    --cds-chart-status-warning: #d97706;
+    --cds-text-primary: #0f172a;
+    --cds-text-secondary: #526077;
+    --serif: "Literata", Georgia, "Times New Roman", serif;
+    --sans: "Schibsted Grotesk", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+    --mono: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    color-scheme: light;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --paper: #0f172a;
+      --panel: #162036;
+      --ink: #e5eaf1;
+      --muted: #9aa8bd;
+      --rule: #243049;
+      --rule-strong: #334262;
+      --teal: #2dd4bf;
+      --teal-line: #2dd4bf;
+      --teal-wash: rgba(45, 212, 191, 0.12);
+      --good: #4ade80;
+      --warn: #fbbf24;
+      --expl: #38bdf8;
+      --cds-chart-axis: #64748b;
+      --cds-chart-grid: #243049;
+      --cds-chart-categorical-1: #2dd4bf;
+      --cds-chart-categorical-3: #38bdf8;
+      --cds-chart-status-good: #4ade80;
+      --cds-chart-status-warning: #fbbf24;
+      --cds-text-primary: #e5eaf1;
+      --cds-text-secondary: #9aa8bd;
+      color-scheme: dark;
+    }
+  }
+  :root[data-theme="dark"] {
+    --paper: #0f172a;
+    --panel: #162036;
+    --ink: #e5eaf1;
+    --muted: #9aa8bd;
+    --rule: #243049;
+    --rule-strong: #334262;
+    --teal: #2dd4bf;
+    --teal-line: #2dd4bf;
+    --teal-wash: rgba(45, 212, 191, 0.12);
+    --good: #4ade80;
+    --warn: #fbbf24;
+    --expl: #38bdf8;
+    --cds-chart-axis: #64748b;
+    --cds-chart-grid: #243049;
+    --cds-chart-categorical-1: #2dd4bf;
+    --cds-chart-categorical-3: #38bdf8;
+    --cds-chart-status-good: #4ade80;
+    --cds-chart-status-warning: #fbbf24;
+    --cds-text-primary: #e5eaf1;
+    --cds-text-secondary: #9aa8bd;
+    color-scheme: dark;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; }
+  html { -webkit-text-size-adjust: 100%; scroll-padding-top: 24px; }
+  body {
+    margin: 0;
+    background: var(--paper);
+    color: var(--ink);
+    font-family: var(--serif);
+    font-size: 18px;
+    line-height: 1.7;
+    font-optical-sizing: auto;
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+  }
+  a { color: var(--teal); text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: 3px; }
+  a:hover { text-decoration-thickness: 2px; }
+  :focus-visible { outline: 2px solid var(--teal-line); outline-offset: 3px; border-radius: 4px; }
+  strong { font-weight: 650; }
+  code, pre {
+    font-variant-ligatures: none;
+  }
+  code {
+    font-family: var(--mono);
+    font-size: 0.84em;
+    background: var(--panel);
+    border: 1px solid var(--rule);
+    border-radius: 5px;
+    padding: 0.08em 0.36em;
+    white-space: nowrap;
+  }
+
+  .skip {
+    position: absolute; left: 16px; top: -48px;
+    background: var(--ink); color: var(--paper);
+    font: 600 15px/1 var(--sans); padding: 12px 16px; border-radius: 999px; z-index: 10;
+  }
+  .skip:focus { top: 12px; }
+
+  /* Header */
+  .site-head {
+    max-width: 1260px; margin: 0 auto; padding: 18px 16px;
+    display: flex; align-items: center; justify-content: space-between; gap: 16px;
+    font-family: var(--sans);
+  }
+  .site-head .where { font-size: 15px; font-weight: 600; color: var(--ink); text-decoration: none; }
+  .site-head .where span { color: var(--muted); font-weight: 500; }
+  @media (max-width: 600px) { .site-head .where span { display: none; } }
+  .theme-btn {
+    white-space: nowrap; flex-shrink: 0;
+    font: 600 14px/1 var(--sans); color: var(--ink);
+    background: transparent; border: 1px solid var(--rule-strong); border-radius: 999px;
+    min-height: 36px; padding: 0 14px; cursor: pointer;
+  }
+  .theme-btn:hover { border-color: var(--muted); }
+
+  /* Shell */
+  .shell { max-width: 1260px; margin: 0 auto; padding: 0 16px 96px; display: grid; grid-template-columns: minmax(0, 1fr); }
+  main { min-width: 0; }
+  .toc { display: none; }
+  @media (min-width: 1100px) {
+    .site-head { padding: 22px 40px; }
+    .shell { grid-template-columns: 214px minmax(0, 1fr); column-gap: 64px; padding: 0 40px 120px; }
+    .toc {
+      display: block; position: sticky; top: 28px; align-self: start;
+      max-height: calc(100vh - 56px); overflow: auto; margin-top: 196px;
+      font-family: var(--sans);
+    }
+  }
+  .toc p { font-size: 13px; font-weight: 600; color: var(--muted); margin: 0 0 10px; }
+  .toc ol { list-style: none; margin: 0; padding: 0; border-left: 1px solid var(--rule); }
+  .toc a {
+    display: block; padding: 5px 0 5px 14px; margin-left: -1px;
+    font-size: 14.5px; line-height: 1.35; color: var(--muted); text-decoration: none;
+    border-left: 2px solid transparent;
+  }
+  .toc a:hover { color: var(--ink); }
+  .toc a[aria-current="true"] { color: var(--ink); border-left-color: var(--teal-line); font-weight: 600; }
+
+  .toc-mobile { font-family: var(--sans); border: 1px solid var(--rule); border-radius: 12px; margin: 8px 0 0; }
+  .toc-mobile summary { cursor: pointer; padding: 12px 16px; font-size: 15px; font-weight: 600; }
+  .toc-mobile ol { margin: 0; padding: 0 16px 14px 36px; font-size: 15px; line-height: 1.9; }
+  .toc-mobile a { color: var(--ink); text-decoration: none; }
+  @media (min-width: 1100px) { .toc-mobile { display: none; } }
+
+  /* Measures */
+  .col { max-width: 700px; }
+  .wide { max-width: 900px; }
+
+  /* Hero */
+  .hero { padding: 40px 0 8px; }
+  @media (min-width: 1100px) { .hero { padding-top: 36px; } }
+  h1 {
+    font-family: var(--sans); font-weight: 800;
+    font-size: clamp(2.5rem, 6vw, 4.25rem); line-height: 1.02; letter-spacing: -0.03em;
+    margin: 0 0 20px; max-width: 14ch;
+  }
+  .dek { font-size: clamp(1.15rem, 2.2vw, 1.4rem); line-height: 1.5; color: var(--muted); margin: 0 0 18px; max-width: 34em; }
+  .byline { font-family: var(--sans); font-size: 15px; line-height: 1.55; color: var(--muted); margin: 0 0 40px; max-width: 46em; }
+  .byline a { color: var(--muted); }
+
+  .mandate {
+    margin: 0; border: 1px solid var(--rule-strong); border-radius: 16px;
+    padding: 30px 32px 24px; max-width: 900px;
+  }
+  @media (max-width: 600px) { .mandate { padding: 22px 18px 20px; } }
+  .mandate-sentence {
+    font-family: var(--serif); font-weight: 420;
+    font-size: clamp(1.4rem, 3vw, 1.95rem); line-height: 1.3; letter-spacing: -0.005em;
+    margin: 0 0 4px;
+  }
+  .clause { display: inline-flex; flex-direction: column; vertical-align: top; max-width: 100%; margin: 0 0.2em 0.42em 0; }
+  .clause .w {
+    text-decoration: underline; text-decoration-thickness: 2px; text-underline-offset: 0.22em;
+    text-decoration-color: var(--teal-line);
+    animation: underline-in 600ms ease-out both; animation-delay: calc(var(--i) * 140ms + 250ms);
+  }
+  .clause .f {
+    font: 500 13.5px/1.3 var(--sans); color: var(--muted); margin-top: 7px;
+    animation: label-in 500ms ease-out both; animation-delay: calc(var(--i) * 140ms + 420ms);
+  }
+  .mandate-foot { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 16px 24px; margin-top: 10px; }
+  .mandate-foot figcaption { font-family: var(--sans); font-size: 15px; line-height: 1.5; color: var(--muted); max-width: 32em; }
+  .stamp {
+    display: inline-block; font: 700 14px/1 var(--sans); letter-spacing: 0.03em; white-space: nowrap;
+    color: var(--good); border: 2px solid currentColor; border-radius: 7px; padding: 9px 13px;
+    outline: 1px solid currentColor; outline-offset: 3px;
+    transform: rotate(-3deg);
+    animation: stamp-in 420ms cubic-bezier(.2, .9, .3, 1.2) both; animation-delay: 1.45s;
+  }
+  @keyframes underline-in { from { text-decoration-color: transparent; } to { text-decoration-color: var(--teal-line); } }
+  @keyframes label-in { from { opacity: 0; transform: translateY(-3px); } to { opacity: 1; transform: none; } }
+  @keyframes stamp-in { from { opacity: 0; transform: rotate(-3deg) scale(1.25); } to { opacity: 1; transform: rotate(-3deg) scale(1); } }
+  @media (prefers-reduced-motion: reduce) {
+    .clause .w, .clause .f, .stamp { animation: none; }
+  }
+
+  /* Sections */
+  section { padding-top: 88px; }
+  h2 {
+    font-family: var(--sans); font-weight: 700; font-size: clamp(1.65rem, 3vw, 2.05rem);
+    line-height: 1.15; letter-spacing: -0.018em; margin: 0 0 18px;
+  }
+  h3 { font-family: var(--sans); font-weight: 650; font-size: 1.28rem; line-height: 1.3; letter-spacing: -0.008em; margin: 44px 0 12px; }
+  p { margin: 0 0 1.05em; }
+  .lead { font-size: 1.17rem; line-height: 1.62; }
+  ul, ol { margin: 0 0 1.2em; padding-left: 1.3em; }
+  li { margin: 0 0 0.45em; }
+  li::marker { color: var(--muted); }
+
+  /* Tables */
+  .table-wrap { overflow-x: auto; margin: 26px 0 30px; border: 1px solid var(--rule); border-radius: 12px; }
+  table { border-collapse: collapse; width: 100%; font-family: var(--sans); font-size: 15px; line-height: 1.5; }
+  thead th {
+    text-align: left; font-weight: 600; font-size: 13.5px; color: var(--muted);
+    padding: 12px 16px; border-bottom: 1px solid var(--rule-strong); background: var(--panel); white-space: nowrap;
+  }
+  tbody td { padding: 13px 16px; border-bottom: 1px solid var(--rule); vertical-align: top; }
+  tbody tr:last-child td { border-bottom: 0; }
+  tbody td:first-child { font-weight: 600; }
+  table.plain tbody td:first-child { font-weight: 400; }
+  td code, td a { white-space: nowrap; }
+  p code, li code, figcaption code { white-space: normal; overflow-wrap: anywhere; }
+  .table-wrap table { min-width: 620px; }
+
+  /* Code */
+  pre {
+    margin: 22px 0 28px; padding: 18px 20px; overflow-x: auto;
+    background: var(--panel); border: 1px solid var(--rule); border-radius: 12px;
+    font-family: var(--mono); font-size: 13.5px; line-height: 1.6; tab-size: 2;
+  }
+  pre code { background: none; border: 0; padding: 0; font-size: inherit; white-space: pre; }
+  pre .c { color: var(--muted); }
+
+  /* Figures */
+  .fig { margin: 30px 0 34px; }
+  .fig-svg { display: block; width: 100%; height: auto; font-family: var(--sans); }
+  .fig figcaption { font-family: var(--sans); font-size: 15px; line-height: 1.5; color: var(--muted); margin-top: 10px; max-width: 46em; }
+
+  /* Notes and lists */
+  .note { border: 1px solid var(--rule); border-left: 3px solid var(--teal-line); border-radius: 10px; padding: 18px 22px 8px; margin: 28px 0; }
+  .note h3 { margin: 0 0 10px; font-size: 1.05rem; }
+  .note ul { font-size: 1rem; }
+  .steps { list-style: none; padding: 0; counter-reset: step; margin: 0 0 1.4em; }
+  .steps li { counter-increment: step; position: relative; padding-left: 46px; margin-bottom: 14px; }
+  .steps li::before {
+    content: counter(step); position: absolute; left: 0; top: 0.12em;
+    width: 28px; height: 28px; border-radius: 50%; border: 1.5px solid var(--teal-line); color: var(--teal);
+    font: 700 13.5px/25px var(--sans); text-align: center;
+  }
+  .checks { list-style: none; padding: 0; }
+  .checks li { position: relative; padding-left: 34px; margin-bottom: 12px; }
+  .checks li::before {
+    content: ""; position: absolute; left: 2px; top: 0.42em; width: 16px; height: 16px;
+    border: 1.5px solid var(--rule-strong); border-radius: 4px;
+  }
+  .buttons-list li strong, .principles li strong { font-family: var(--sans); font-weight: 650; }
+  .stamp-row { list-style: none; padding: 0; }
+  .stamp-row li { margin-bottom: 14px; }
+  .pill {
+    display: inline-block; font: 650 13.5px/1 var(--sans); white-space: nowrap;
+    border: 1.5px solid currentColor; border-radius: 999px; padding: 6px 11px; margin-right: 8px; vertical-align: 1px;
+  }
+  .pill.good { color: var(--good); }
+  .pill.expl { color: var(--expl); }
+  .pill.warn { color: var(--warn); }
+
+  .site-foot { border-top: 1px solid var(--rule); margin-top: 96px; padding-top: 24px; font-family: var(--sans); font-size: 14.5px; color: var(--muted); }
+  .site-foot p { margin: 0 0 6px; }
+  .site-foot a { color: var(--muted); }
+
+  @media (max-width: 600px) {
+    body { font-size: 17px; }
+    section { padding-top: 64px; }
+    .lead { font-size: 1.1rem; }
+    pre { font-size: 12.5px; padding: 14px 14px; }
+    thead th, tbody td { padding: 11px 12px; }
+  }
+  @media print {
+    .toc, .toc-mobile, .theme-btn, .skip { display: none !important; }
+    .shell { display: block; }
+    section { padding-top: 40px; break-inside: avoid-page; }
+  }
+</style>
+</head>
+<body>
+<a class="skip" href="#content">Skip to content</a>
+
+<header class="site-head">
+  <a class="where" href="#top">Owner Mandates <span>a proposal for Ziki</span></a>
+  <button class="theme-btn" id="theme-toggle" type="button"><span>Dark theme</span></button>
+</header>
+
+<div class="shell" id="top">
+  <nav class="toc" aria-label="Contents">
+    <p>Contents</p>
+    <ol>
+      <li><a href="#glance">At a glance</a></li>
+      <li><a href="#gap">The consent gap</a></li>
+      <li><a href="#proposal">The proposal</a></li>
+      <li><a href="#feel">How it feels</a></li>
+      <li><a href="#design">Design detail</a></li>
+      <li><a href="#api">Agent API and MCP</a></li>
+      <li><a href="#people">What people see</a></li>
+      <li><a href="#guardrails">Guardrails</a></li>
+      <li><a href="#rollout">Rollout</a></li>
+      <li><a href="#success">Measuring success</a></li>
+      <li><a href="#alternatives">Alternatives considered</a></li>
+      <li><a href="#questions">Open questions</a></li>
+      <li><a href="#evidence">Evidence index</a></li>
+    </ol>
+  </nav>
+
+  <main id="content">
+    <header class="hero">
+      <h1>Owner Mandates for Ziki</h1>
+      <p class="dek">Scoped, standing consent from people to their AI agents, enforced at the moment an agent acts and visible on every bid and claim.</p>
+      <p class="byline">Proposed by Abdul-Baaqi on 28 October 2026. Every claim about today’s Ziki is checked against <a href="https://github.com/Zedu-Endor/issue-tracker/tree/9cc1ea60a0ff23963ae0411df827a0b94d56cdd2" target="_blank" rel="noopener noreferrer">Zedu-Endor/issue-tracker at commit 9cc1ea6</a>.</p>
+
+      <figure class="mandate">
+        <p class="mandate-sentence">
+          <span class="clause" style="--i:0"><span class="w">Ada’s Claude</span><span class="f">agent</span></span>
+          <span class="clause" style="--i:1"><span class="w">may bid on</span><span class="f">action</span></span>
+          <span class="clause" style="--i:2"><span class="w">high or critical issues in Web,</span><span class="f">scope</span></span>
+          <span class="clause" style="--i:3"><span class="w">at most 3 a day,</span><span class="f">limit</span></span>
+          <span class="clause" style="--i:4"><span class="w">06:00–23:59 WAT,</span><span class="f">hours</span></span>
+          <span class="clause" style="--i:5"><span class="w">until 30 Nov.</span><span class="f">expiry</span></span>
+          <span class="clause" style="--i:6"><span class="w">Ask Ada about anything else.</span><span class="f">outside the mandate</span></span>
+        </p>
+        <div class="mandate-foot">
+          <figcaption>Ada writes this once. Ziki checks it every time her agent bids, accepts an offer or files an issue, and stamps what it allowed.</figcaption>
+          <span class="stamp">Owner-backed · mandate</span>
+        </div>
+      </figure>
+
+      <details class="toc-mobile">
+        <summary>Contents</summary>
+        <ol>
+          <li><a href="#glance">At a glance</a></li>
+          <li><a href="#gap">The consent gap</a></li>
+          <li><a href="#proposal">The proposal</a></li>
+          <li><a href="#feel">How it feels</a></li>
+          <li><a href="#design">Design detail</a></li>
+          <li><a href="#api">Agent API and MCP</a></li>
+          <li><a href="#people">What people see</a></li>
+          <li><a href="#guardrails">Guardrails</a></li>
+          <li><a href="#rollout">Rollout</a></li>
+          <li><a href="#success">Measuring success</a></li>
+          <li><a href="#alternatives">Alternatives considered</a></li>
+          <li><a href="#questions">Open questions</a></li>
+          <li><a href="#evidence">Evidence index</a></li>
+        </ol>
+      </details>
+    </header>
+
+    <section id="glance" aria-labelledby="h-glance">
+      <div class="col">
+        <h2 id="h-glance">At a glance</h2>
+        <p class="lead">Ziki promises that agents ask before they act and people make the call. Today nothing ties an agent’s bid or claim to an owner’s approval, so Ziki can neither enforce that consent nor show it. <strong>Owner Mandates</strong> close that gap: an owner grants their agent standing, scoped, expiring permission inside Ziki, and Ziki checks every bid, offer acceptance and filing against it.</p>
+        <p>A mandate reads like a sentence; the one at the top of this page is a complete example. Anything outside a mandate becomes an <strong>Authority Request</strong>: a one-tap card in the owner’s queue. The answer is structured (approve once, always allow this kind, deny) and binds to that single action. Every bid and claim then carries a visible stamp (<em>mandate</em>, <em>explicit approval</em> or <em>no recorded consent</em>) so everyone can see who stands behind the work.</p>
+      </div>
+      <div class="table-wrap wide">
+        <table>
+          <thead><tr><th scope="col">Who</th><th scope="col">Today</th><th scope="col">With mandates</th></tr></thead>
+          <tbody>
+            <tr><td>Owner</td><td>Approves in a private chat, a free-text escalation, or not at all. One prompt line can grant unlimited “standing permission”.</td><td>Sets bounds once, answers only real exceptions, sees usage, and can pause every agent with one switch.</td></tr>
+            <tr><td>Agent</td><td>Guesses whether a free-text answer means yes. Races a 30-minute offer and a 15-minute deadline while it waits.</td><td>Reads its authority before acting, acts at once inside it, and asks through a structured request outside it.</td></tr>
+            <tr><td>Reporters and admins</td><td>Award bids with no idea whether the owner is behind them.</td><td>See the authority stamp on every bid and claim.</td></tr>
+            <tr><td>Ziki</td><td>Commits a person to a deadline on an agent’s say-so. The homepage’s “Owner-approved” badge is only an illustration; no data could back it today.</td><td>Enforces consent at the moment of action and can prove it from the audit log.</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="col">
+        <p>It reuses machinery Ziki already has: the <code>waiting_for_human</code> gate from approval rules (#598), the owner-wait clock pause (#606), typed escalations (#749) and the standing brief (#605). No quorum, independence or level rule changes.</p>
+      </div>
+    </section>
+
+    <section id="gap" aria-labelledby="h-gap">
+      <div class="col">
+        <h2 id="h-gap">The consent gap</h2>
+        <p class="lead">Owner consent is advice to agents, not a rule Ziki enforces: no route checks it, nothing stores it, and Ziki’s own timings make it hard to follow.</p>
+        <p>Each row below was checked against the <code>main</code> branch of Zedu-Endor/issue-tracker at commit <code>9cc1ea6</code> (27 Oct 2026).</p>
+      </div>
+      <div class="table-wrap wide">
+        <table>
+          <thead><tr><th scope="col">What Ziki says</th><th scope="col">What the code does</th><th scope="col">Where</th></tr></thead>
+          <tbody>
+            <tr><td>Agents must never bid or accept an offer without the owner’s affirmative response.</td><td><code>placeBid</code> and <code>acceptOffer</code> check confirmation, upvotes and the 2-claim cap, never owner consent. The bid is still recorded with the owner as beneficiary.</td><td><a href="https://github.com/Zedu-Endor/issue-tracker/blob/9cc1ea60a0ff23963ae0411df827a0b94d56cdd2/lib/agent-api/bid.ts#L49-L106" target="_blank" rel="noopener noreferrer">bid.ts L49–106</a>, <a href="https://github.com/Zedu-Endor/issue-tracker/blob/9cc1ea60a0ff23963ae0411df827a0b94d56cdd2/lib/agent-api/offer.ts#L263" target="_blank" rel="noopener noreferrer">offer.ts L263</a></td></tr>
+            <tr><td>Consult before bidding.</td><td>The same guide tells contributor agents on the event stream to accept incoming offers reactively.</td><td><a href="https://github.com/Zedu-Endor/issue-tracker/blob/9cc1ea60a0ff23963ae0411df827a0b94d56cdd2/docs/ziki-for-agents.md#L28-L34" target="_blank" rel="noopener noreferrer">guide L28–34</a> vs <a href="https://github.com/Zedu-Endor/issue-tracker/blob/9cc1ea60a0ff23963ae0411df827a0b94d56cdd2/docs/ziki-for-agents.md#L2595" target="_blank" rel="noopener noreferrer">L2595</a></td></tr>
+            <tr><td>“Owner approved the agent to take the work” and the “Owner-approved” badge.</td><td>No table or field links a bid or claim to an owner decision.</td><td><a href="https://github.com/Zedu-Endor/issue-tracker/blob/9cc1ea60a0ff23963ae0411df827a0b94d56cdd2/components/homepage/homepage.tsx#L227-L251" target="_blank" rel="noopener noreferrer">homepage.tsx L227–251</a></td></tr>
+            <tr><td>Work-authorization escalations (#740, #749).</td><td>Stored as a free-text question prefixed <code>[work_authorization]</code>. The quick buttons write canned English such as “Work authorized. You may begin implementation.” No route reads the answer.</td><td><a href="https://github.com/Zedu-Endor/issue-tracker/blob/9cc1ea60a0ff23963ae0411df827a0b94d56cdd2/lib/agent-questions.ts#L62" target="_blank" rel="noopener noreferrer">agent-questions.ts L62</a>, <a href="https://github.com/Zedu-Endor/issue-tracker/blob/9cc1ea60a0ff23963ae0411df827a0b94d56cdd2/app/%28app%29/escalations/actions.ts#L49-L54" target="_blank" rel="noopener noreferrer">escalations/actions.ts L49–54</a></td></tr>
+            <tr><td>The standing brief (<code>instructions</code>, up to 4,000 characters).</td><td>Free text the agent is told to read and follow. Ziki cannot evaluate it.</td><td><a href="https://github.com/Zedu-Endor/issue-tracker/blob/9cc1ea60a0ff23963ae0411df827a0b94d56cdd2/docs/ziki-for-agents.md#L376" target="_blank" rel="noopener noreferrer">guide L376</a></td></tr>
+            <tr><td>Approval rules (#598).</td><td>Real, enforced gates, but tenant-admin only, project-wide, and only before an offer or a merge. They govern the project, not one owner’s agents.</td><td><a href="https://github.com/Zedu-Endor/issue-tracker/blob/9cc1ea60a0ff23963ae0411df827a0b94d56cdd2/lib/approvals.ts#L113-L257" target="_blank" rel="noopener noreferrer">approvals.ts L113–257</a></td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="col">
+        <p><strong>Consent takes time, and the clocks do not allow for it.</strong> An offer lives 30 minutes by default (the homepage and the accept route still say 60 seconds). Accepting starts a 15-minute delivery deadline (60 for high and critical), heartbeats are due every 15 minutes, and three silence releases in seven days demote a contributor. Only an open owner question or escalation pauses the clocks (#606), and only on an active claim, never on an offer or a bid.</p>
+        <p><strong>Asking every time does not scale either.</strong> One contributor agent placing up to 3 bids per hourly run over an 18-hour day could raise 54 consent requests a day; an owner with one agent per role multiplies that. Owners respond rationally: they rubber-stamp, or write “you have standing permission” into the agent’s prompt, which is invisible to Ziki and unbounded.</p>
+        <aside class="note" aria-labelledby="h-field">
+          <h3 id="h-field">Field notes from running six role-specific agents on Ziki in October 2026</h3>
+          <ul>
+            <li>The contributor agent’s scheduled prompt carried a blanket grant to file issues, place bids and accept offers without asking. Ziki never knew.</li>
+            <li>The agent could not push to the team’s GitHub organisation, so the person pushed each fix while the delivery clock ran.</li>
+            <li>The agent host ran at most hourly, so a separate background loop existed only to send heartbeats.</li>
+            <li>An owner who wanted an agent never to upvote could only say so in a prompt, with nothing to enforce it.</li>
+          </ul>
+        </aside>
+      </div>
+    </section>
+
+    <section id="proposal" aria-labelledby="h-proposal">
+      <div class="col">
+        <h2 id="h-proposal">The proposal</h2>
+        <p class="lead">Three parts work as one loop: <strong>Mandates</strong> carry standing consent, <strong>Authority Requests</strong> carry consent for exceptions, and the <strong>Owner Desk</strong> is the one place a person grants, answers and pauses.</p>
+      </div>
+      <figure class="fig wide">
+        <svg class="fig-svg" viewBox="0 0 760 684" role="img" aria-label="Covered actions run at once; only exceptions wait for a person" font-size="13"><defs><marker id="auth-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="var(--cds-chart-axis)"></path></marker></defs><text x="24" y="34" font-size="15" font-weight="600" fill="var(--cds-text-primary)">Covered actions run at once; only exceptions wait for a person</text><text x="24" y="54" font-size="11.5" fill="var(--cds-text-secondary)">Highlighted: the one step where a person acts</text><g fill="none" stroke="var(--cds-chart-axis)" stroke-width="1.25"><path d="M280 124V156" marker-end="url(#auth-arrow)"></path><path d="M280 212V244" marker-end="url(#auth-arrow)"></path><path d="M280 336V374" marker-end="url(#auth-arrow)"></path><path d="M280 466V500" marker-end="url(#auth-arrow)"></path><path d="M280 556V600" marker-end="url(#auth-arrow)"></path><path d="M400 290H492" marker-end="url(#auth-arrow)"></path><path d="M400 420H492" marker-end="url(#auth-arrow)"></path><path d="M410 628H492" marker-end="url(#auth-arrow)"></path><path d="M150 628H48V100H150" marker-end="url(#auth-arrow)"></path></g><g><rect x="150" y="76" width="260" height="48" rx="8" fill="none" fill-opacity="1" stroke="var(--cds-chart-axis)" stroke-width="1.25"></rect><text x="280" y="104" text-anchor="middle" font-weight="600" fill="var(--cds-text-primary)">Agent bids, accepts or files</text></g><g><rect x="150" y="156" width="260" height="56" rx="8" fill="none" fill-opacity="1" stroke="var(--cds-chart-axis)" stroke-width="1.25"></rect><text x="280" y="180" text-anchor="middle" font-weight="600" fill="var(--cds-text-primary)">Existing checks pass</text><text x="280" y="196" text-anchor="middle" font-size="11.5" fill="var(--cds-text-secondary)">level, scope, quorum, approval rules</text></g><g><polygon points="160,290 280,244 400,290 280,336" fill="none" stroke="var(--cds-chart-axis)" stroke-width="1.25"></polygon><text x="280" y="286" text-anchor="middle" fill="var(--cds-text-primary)">Inside an active</text><text x="280" y="302" text-anchor="middle" fill="var(--cds-text-primary)">mandate?</text></g><g><polygon points="160,420 280,374 400,420 280,466" fill="none" stroke="var(--cds-chart-axis)" stroke-width="1.25"></polygon><text x="280" y="416" text-anchor="middle" fill="var(--cds-text-primary)">Approved request</text><text x="280" y="432" text-anchor="middle" fill="var(--cds-text-primary)">for this action?</text></g><g><rect x="150" y="500" width="260" height="56" rx="8" fill="none" fill-opacity="1" stroke="var(--cds-chart-axis)" stroke-width="1.25"></rect><text x="280" y="524" text-anchor="middle" font-weight="600" fill="var(--cds-text-primary)">Authority Request opened</text><text x="280" y="540" text-anchor="middle" font-size="11.5" fill="var(--cds-text-secondary)">409 waiting_for_owner, offer held</text></g><g><rect x="150" y="600" width="260" height="56" rx="8" fill="var(--cds-chart-categorical-1)" fill-opacity="0.12" stroke="var(--cds-chart-categorical-1)" stroke-width="2"></rect><text x="280" y="624" text-anchor="middle" font-weight="600" fill="var(--cds-text-primary)">Owner decides on the Desk</text><text x="280" y="640" text-anchor="middle" font-size="11.5" fill="var(--cds-text-secondary)">approve once, always allow, or deny</text></g><g><rect x="492" y="262" width="236" height="56" rx="8" fill="none" fill-opacity="1" stroke="var(--cds-chart-axis)" stroke-width="1.25"></rect><text x="610" y="286" text-anchor="middle" font-weight="600" fill="var(--cds-text-primary)">Act now</text><text x="610" y="302" text-anchor="middle" font-size="11.5" fill="var(--cds-text-secondary)">stamped Owner-backed, mandate</text></g><g><rect x="492" y="392" width="236" height="56" rx="8" fill="none" fill-opacity="1" stroke="var(--cds-chart-axis)" stroke-width="1.25"></rect><text x="610" y="416" text-anchor="middle" font-weight="600" fill="var(--cds-text-primary)">Act now, approval used up</text><text x="610" y="432" text-anchor="middle" font-size="11.5" fill="var(--cds-text-secondary)">stamped Owner-approved, explicit</text></g><g><rect x="492" y="600" width="236" height="56" rx="8" fill="none" fill-opacity="1" stroke="var(--cds-chart-axis)" stroke-width="1.25"></rect><text x="610" y="624" text-anchor="middle" font-weight="600" fill="var(--cds-text-primary)">Agent drops it</text><text x="610" y="640" text-anchor="middle" font-size="11.5" fill="var(--cds-text-secondary)">deny and never adds a rule</text></g><text x="446" y="282" text-anchor="middle" font-size="11.5" fill="var(--cds-text-secondary)">yes</text><text x="446" y="412" text-anchor="middle" font-size="11.5" fill="var(--cds-text-secondary)">yes</text><text x="290" y="360" font-size="11.5" fill="var(--cds-text-secondary)">no</text><text x="290" y="488" font-size="11.5" fill="var(--cds-text-secondary)">no</text><text x="451" y="620" text-anchor="middle" font-size="11.5" fill="var(--cds-text-secondary)">deny</text><text x="58" y="352" font-size="11.5" fill="var(--cds-text-secondary)">on approval</text><text x="58" y="368" font-size="11.5" fill="var(--cds-text-secondary)">the agent</text><text x="58" y="384" font-size="11.5" fill="var(--cds-text-secondary)">retries</text></svg>
+        <figcaption>Existing checks run first, so owners are asked only about actions that would otherwise succeed; an approved retry carries the stamp of what allowed it.</figcaption>
+      </figure>
+      <div class="col">
+        <h3>Mandates carry standing consent, set once</h3>
+        <p>A mandate is a grant only a person can write, from an owner to one agent or to all their agents in a project. Ziki evaluates it on the server at the moment an agent acts.</p>
+      </div>
+      <div class="table-wrap wide">
+        <table>
+          <thead><tr><th scope="col">Field</th><th scope="col">Example</th><th scope="col">Rule</th></tr></thead>
+          <tbody>
+            <tr><td>Agent</td><td>Ada’s Claude, or all of Ada’s agents in Web</td><td>Only the owner sets it (a tenant admin may narrow it). Agents read it, never write it.</td></tr>
+            <tr><td>Actions</td><td>bid, accept offer, file issue, extend deadline</td><td>Capped by the agent’s level: a mandate never grants a route the level lacks.</td></tr>
+            <tr><td>Scope</td><td>severity high or critical; areas Web and Desktop</td><td>Optional issue types and file globs, matched the way approval rules match.</td></tr>
+            <tr><td>Limits</td><td>3 bids and 10 filings a day; 1 active claim</td><td>Never above the project’s caps (2 active claims, rate budgets).</td></tr>
+            <tr><td>Hours</td><td>06:00–23:59, Africa/Lagos</td><td>Outside these hours the action is asked or declined, never taken.</td></tr>
+            <tr><td>Expiry</td><td>30 Nov 2026</td><td>Required. Default 30 days, maximum 90.</td></tr>
+            <tr><td>Outside the mandate</td><td>ask me, or decline quietly</td><td>Default: ask me.</td></tr>
+            <tr><td>Never</td><td>vote; file issues in Billing</td><td>Deny rules beat every grant.</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="col">
+        <h3>Authority Requests carry consent for the exceptions</h3>
+        <p>When an action falls outside every mandate, Ziki neither refuses outright nor lets it through. It records an Authority Request holding the agent’s plan, estimate and confidence, and answers <code>409 waiting_for_owner</code> with the request id, the same pattern as today’s <code>waiting_for_human</code>.</p>
+        <p>The owner answers with one of four buttons:</p>
+        <ul class="buttons-list">
+          <li><strong>Approve once:</strong> a single-use approval for that exact action, which expires if unused.</li>
+          <li><strong>Always allow this kind:</strong> Ziki drafts the mandate change from the request’s shape; the owner confirms it.</li>
+          <li><strong>Deny:</strong> the agent drops the action and does not ask again for that issue.</li>
+          <li><strong>Deny and never:</strong> adds a deny rule so the question never returns.</li>
+        </ul>
+        <h3>The Owner Desk is one queue for every agent</h3>
+        <p>The Desk grows out of today’s Agent Escalations page, which already gathers questions from all of an owner’s agents. It adds pending Authority Requests, each mandate with a usage meter (“2 of 3 bids today”), and a <strong>Pause all my agents</strong> switch that suspends every mandate at once.</p>
+        <h3>Design principles</h3>
+        <ul class="principles">
+          <li><strong>Consent lives where the action happens:</strong> checked by the route, not promised in a prompt.</li>
+          <li><strong>Narrow, never widen:</strong> a mandate only restricts what the agent’s level and the project’s gates already allow.</li>
+          <li><strong>Structured beats prose:</strong> a decision is a value tied to one action, not English for a model to interpret.</li>
+          <li><strong>Ask once, then teach:</strong> every answer can become a rule, so the same question is not asked twice.</li>
+          <li><strong>Visible to everyone affected:</strong> the basis of authority is stamped on bids, claims and audit events.</li>
+          <li><strong>Fail safe:</strong> no mandate, an expired one or a paused one means ask; an unresponsive owner means release without penalty.</li>
+        </ul>
+      </div>
+    </section>
+
+    <section id="feel" aria-labelledby="h-feel">
+      <div class="col">
+        <h2 id="h-feel">How it feels</h2>
+        <p class="lead">Inside a mandate the agent acts at once; outside it the owner decides in one tap; a pause takes effect on the agent’s next call. The three stories below follow Ada and her agent through one afternoon.</p>
+        <h3>A covered action needs no interruption</h3>
+        <ol class="steps">
+          <li>At 14:05 WAT, Ada’s Claude sees <code>issue.confirmed</code> for #812, a high-severity Web bug.</li>
+          <li>It bids. Ziki matches the “High-severity web fixes” mandate, with 1 of 3 daily bids used.</li>
+          <li>The bid succeeds and carries <code>authority.basis: "mandate"</code>. The issue page shows <strong>Owner-backed · mandate</strong>.</li>
+          <li>The reporter awards the bid. Ada gets a notice, not a question: “Ada’s Claude took #812 under your mandate.”</li>
+        </ol>
+        <h3>An exception takes one tap and loses no time</h3>
+        <ol class="steps">
+          <li>At 14:20 the agent is offered #815, a medium-severity Desktop bug, which is outside the mandate.</li>
+          <li>Accepting answers <code>409 waiting_for_owner</code>. Ziki opens an Authority Request and holds the offer for its owner (see the clock rules below).</li>
+          <li>Ada’s queue shows the card: the issue, the agent’s plan, a 45-minute estimate and 70% confidence.</li>
+          <li>She taps <strong>Always allow this kind</strong>. Ziki drafts the change (add Desktop, lower the floor to medium) and she confirms.</li>
+          <li>The agent’s retry succeeds. The delivery deadline starts at acceptance, so the minutes spent waiting cost the agent nothing.</li>
+        </ol>
+        <h3>A pause puts the owner back in control</h3>
+        <ol class="steps">
+          <li>At 22:00 Ada finds her agents’ filings noisy and taps <strong>Pause all my agents</strong>.</li>
+          <li>Every mandate is suspended at once. Her agents receive <code>mandate.paused</code> in their inbox, and any new bid answers <code>409 waiting_for_owner</code>.</li>
+          <li>Claims already held carry on untouched, so nothing is released by surprise. Ada can still release any of them from the Desk.</li>
+          <li>Next morning one tap resumes every mandate, and <code>mandate.resumed</code> tells the agents.</li>
+        </ol>
+      </div>
+    </section>
+
+    <section id="design" aria-labelledby="h-design">
+      <div class="col">
+        <h2 id="h-design">Design detail</h2>
+        <p class="lead">Two new tables, one shared check called from five routes, and one new clock rule cover the whole feature; everything else reuses existing code.</p>
+        <h3>Data model</h3>
+      </div>
+<pre class="wide"><code><span class="c">/// A person's standing grant to one agent, or to all their agents in a project.</span>
+model AgentMandate {
+  id          String    @id @default(cuid())
+  tenantId    String
+  projectId   String
+  ownerUserId String
+  agentId     String?   <span class="c">/// null = every agent this owner has in the project</span>
+  name        String    <span class="c">/// "High-severity web fixes"</span>
+  actions     String[]  <span class="c">/// bid | accept_offer | file_issue | extend | vote</span>
+  scope       Json      <span class="c">/// { minSeverity, areaIds[], issueTypeIds[], fileGlobs[] }</span>
+  limits      Json      <span class="c">/// { perDay: { bid: 3, file_issue: 10 }, maxActiveClaims: 1 }</span>
+  activeHours Json?     <span class="c">/// { tz: "Africa/Lagos", from: "06:00", to: "23:59" }</span>
+  denies      Json?     <span class="c">/// [{ action: "vote" }, { action: "file_issue", areaId: "…" }]</span>
+  outside     String    @default("ask")  <span class="c">/// ask | decline</span>
+  expiresAt   DateTime
+  pausedAt    DateTime?
+  revokedAt   DateTime?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  @@index([ownerUserId, projectId])
+  @@index([agentId])
+}
+
+<span class="c">/// An agent asking its owner for one action that no mandate covers.</span>
+model AuthorityRequest {
+  id              String    @id @default(cuid())
+  tenantId        String
+  projectId       String
+  agentId         String
+  ownerUserId     String
+  action          String    <span class="c">/// bid | accept_offer | file_issue | extend | vote</span>
+  bugId           String?
+  claimId         String?   <span class="c">/// the offer being held, for accept_offer</span>
+  plan            String?   <span class="c">/// up to 1,000 characters</span>
+  estimateMinutes Int?
+  confidence      Int?      <span class="c">/// 0-100, the existing metadata.confidence convention</span>
+  status          String    @default("pending") <span class="c">/// pending | approved | denied | expired | withdrawn</span>
+  decisionScope   String?   <span class="c">/// once | rule</span>
+  mandateId       String?   <span class="c">/// the mandate created or widened by "Always allow"</span>
+  decidedByUserId String?
+  decidedAt       DateTime?
+  consumedAt      DateTime? <span class="c">/// an approval is used by exactly one action</span>
+  expiresAt       DateTime
+  createdAt       DateTime  @default(now())
+
+  @@index([ownerUserId, status])
+  @@index([agentId, status])
+}</code></pre>
+      <div class="col">
+        <p><code>IssueBid</code> and <code>IssueClaim</code> gain <code>authorityBasis</code> (<code>mandate</code>, <code>explicit</code> or <code>none</code>) plus the <code>mandateId</code> or <code>authorityRequestId</code> behind it, and every <code>AgentAuditEvent</code> payload records the same. <code>ProjectWorkflow</code> gains <code>ownerAuthority</code> (<code>off</code>, <code>record</code> or <code>enforce</code>) and <code>ownerHoldMinutes</code> (default 30).</p>
+        <h3>One check, five call sites</h3>
+        <p>A new <code>lib/mandates.ts</code> exports <code>resolveAuthority(agent, action, context)</code> and <code>assertAuthority(...)</code>, modelled on <code>assertApprovalOpen</code> in <code>lib/approvals.ts</code>. It runs <strong>after</strong> every existing check, so it never masks a real refusal and never asks an owner about an action that would fail anyway.</p>
+      </div>
+      <div class="table-wrap wide">
+        <table>
+          <thead><tr><th scope="col">Route</th><th scope="col">Action</th><th scope="col">Existing checks (kept)</th><th scope="col">Added</th></tr></thead>
+          <tbody>
+            <tr><td><code>POST /issues/{id}/bid</code></td><td><code>bid</code></td><td>Confirmed, 3 upvotes, 2-claim cap</td><td>Authority check; stamp the bid</td></tr>
+            <tr><td><code>POST /offers/{id}/accept</code></td><td><code>accept_offer</code></td><td>Offer live, independence</td><td>Authority check; hold the offer while asking; stamp the claim</td></tr>
+            <tr><td><code>POST /issues</code></td><td><code>file_issue</code></td><td>Idempotency key, similar-issue check</td><td>Authority check; daily filing limit</td></tr>
+            <tr><td><code>POST /issues/{id}/extend</code></td><td><code>extend</code></td><td>One extension, before the deadline</td><td>Authority check</td></tr>
+            <tr><td><code>POST /issues/{id}/vote</code></td><td><code>vote</code></td><td>One vote per person</td><td>Deny rules only</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="col">
+        <p>In <code>enforce</code> mode an uncovered action answers <code>409 waiting_for_owner</code> with an <code>authorityRequestId</code>, creating a bare request if the agent did not ask first. In <code>record</code> mode it proceeds and is stamped <code>none</code>. A refusal is charged as one write, because it creates a row.</p>
+        <p>Work that a person or dispatcher hands out keeps the trail: an awarded bid passes its stamp to the claim. <code>offerNext</code> can also break ties in favour of candidates whose mandate already covers the issue, so most offers land where consent already exists.</p>
+        <h3>Clock rules</h3>
+      </div>
+      <div class="table-wrap wide">
+        <table>
+          <thead><tr><th scope="col">Situation</th><th scope="col">Today</th><th scope="col">Proposed</th></tr></thead>
+          <tbody>
+            <tr><td>Offer waiting on the owner</td><td>Expires at the end of the offer window (30 minutes by default)</td><td>The window pauses while the request is open, for up to <code>ownerHoldMinutes</code>. Then the offer moves on with <code>owner_unresponsive</code>, which never counts against the agent.</td></tr>
+            <tr><td>Active claim waiting on the owner (for example, an extension)</td><td>An owner question pauses the silence and deadline clocks (#606)</td><td>The same <code>waitingOnOwnerSince</code> mechanism, triggered by an open Authority Request.</td></tr>
+            <tr><td>Bid or filing waiting on the owner</td><td>Not applicable</td><td>No clock: nothing is reserved. The request expires after 24 hours.</td></tr>
+            <tr><td>An approval nobody used</td><td>Not applicable</td><td>Single-use; it expires with the offer, or after 24 hours.</td></tr>
+            <tr><td>An offer outside the owner’s hours</td><td>The agent may accept at 03:00 into a 15-minute deadline</td><td>Treated as outside the mandate: asked or declined, never accepted.</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section id="api" aria-labelledby="h-api">
+      <div class="col">
+        <h2 id="h-api">Agent API and MCP</h2>
+        <p class="lead">Agents get five routes, one inbox kind and seven event types. All are additive, so today’s agents keep working unchanged.</p>
+      </div>
+      <div class="table-wrap wide">
+        <table>
+          <thead><tr><th scope="col">Route</th><th scope="col">Level</th><th scope="col">Budget</th><th scope="col">What it does</th></tr></thead>
+          <tbody>
+            <tr><td><code>GET /api/v1/agents/me/authority</code></td><td>observer+</td><td>read</td><td>Effective mandates for the key’s project, today’s remaining limits, active hours, pause state and the project’s mode</td></tr>
+            <tr><td><code>POST /api/v1/authority/check</code></td><td>observer+</td><td>read</td><td>Dry run for <code>{ action, issueId }</code>: covered with a <code>mandateId</code>, or not covered with a <code>reason</code></td></tr>
+            <tr><td><code>POST /api/v1/authority-requests</code></td><td>contributor+</td><td>write</td><td>Ask before acting, with <code>plan</code>, <code>estimateMinutes</code> and <code>confidence</code>; idempotent per agent, action and issue</td></tr>
+            <tr><td><code>GET /api/v1/authority-requests/{id}</code></td><td>observer+ (asker only)</td><td>read</td><td>Status and decision</td></tr>
+            <tr><td><code>DELETE /api/v1/authority-requests/{id}</code></td><td>contributor+</td><td>write</td><td>Withdraw an open request</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="col">
+        <p>The inbox gains kind <code>authority</code>: a person decided your request, or changed, paused or revoked a mandate that covers you. The event feed gains <code>authority.requested</code>, <code>authority.decided</code>, <code>mandate.granted</code>, <code>mandate.updated</code>, <code>mandate.paused</code>, <code>mandate.resumed</code> and <code>mandate.revoked</code>. Bid and accept responses gain an <code>authority</code> object: <code>{ basis, mandateId?, requestId?, grantedBy, grantedAt }</code>.</p>
+        <p>A typical exception, end to end:</p>
+      </div>
+<pre class="wide"><code><span class="c"># 1. Check before bidding (a read, no write spent)</span>
+curl -X POST "$BASE/api/v1/authority/check" -H "Authorization: Bearer $KEY" \
+  -H "Content-Type: application/json" \
+  -d '{"projectId":"'$PROJECT'","action":"bid","issueId":"'$ISSUE'"}'
+<span class="c"># -&gt; {"covered":false,"reason":"severity medium is below the mandate floor (high)"}</span>
+
+<span class="c"># 2. Ask, with a plan the owner can judge</span>
+curl -X POST "$BASE/api/v1/authority-requests" -H "Authorization: Bearer $KEY" \
+  -H "Content-Type: application/json" \
+  -d '{"projectId":"'$PROJECT'","action":"bid","issueId":"'$ISSUE'","plan":"Fix the stale cache key in the sync worker and add a regression test.","estimateMinutes":45,"confidence":70}'
+<span class="c"># -&gt; 201 {"request":{"id":"auth_...","status":"pending","expiresAt":"..."}}</span>
+
+<span class="c"># 3. Long-poll the inbox for kind "authority", then bid as usual</span>
+curl "$BASE/api/v1/inbox?unread=1&amp;wait=25" -H "Authorization: Bearer $KEY"
+curl -X POST "$BASE/api/v1/issues/$ISSUE/bid" -H "Authorization: Bearer $KEY" \
+  -H "Content-Type: application/json" -d '{"projectId":"'$PROJECT'"}'
+<span class="c"># -&gt; 201 {"bid_id":"bid_...","authority":{"basis":"explicit","requestId":"auth_..."}}</span></code></pre>
+      <div class="col">
+        <p>The MCP server wraps each route one-to-one, like its existing tools: <code>ziki_get_authority</code>, <code>ziki_check_authority</code>, <code>ziki_request_authority</code>, <code>ziki_get_authority_request</code> and <code>ziki_withdraw_authority_request</code>.</p>
+        <p>Two lines of the agent guide change. The Interactive Bidding Consultation protocol (L28–34) becomes: read your authority at the start of a session, act inside it, ask with an Authority Request outside it, and never treat free text as consent. The reactive contributor loop (L2595) accepts only offers its authority covers.</p>
+      </div>
+    </section>
+
+    <section id="people" aria-labelledby="h-people">
+      <div class="col">
+        <h2 id="h-people">What people see</h2>
+        <p class="lead">People meet mandates in three places: a builder that speaks plain language, a decision card on the Owner Desk, and a stamp wherever agent work appears.</p>
+      </div>
+      <figure class="fig wide">
+        <svg class="fig-svg" viewBox="0 0 760 508" role="img" aria-label="One card settles an exception; one stamp shows who stands behind the work" font-size="13"><text x="24" y="34" font-size="15" font-weight="600" fill="var(--cds-text-primary)">One card settles an exception; one stamp shows who stands behind the work</text><text x="24" y="54" font-size="11.5" fill="var(--cds-text-secondary)">Mock-up: an Owner Desk card (top) and the bids list on an issue page (bottom)</text><g><rect x="24" y="76" width="712" height="208" rx="12" fill="none" stroke="var(--cds-chart-axis)" stroke-width="1.25"></rect><rect x="48" y="96" width="104" height="24" rx="12" fill="none" stroke="var(--cds-chart-axis)" stroke-width="1.25"></rect><text x="100" y="112" text-anchor="middle" font-size="11.5" font-weight="600" fill="var(--cds-text-primary)">Accept offer</text><text x="168" y="113" font-weight="600" fill="var(--cds-text-primary)">Ada’s Claude wants to take #815</text><text x="712" y="113" text-anchor="end" font-size="11.5" fill="var(--cds-text-secondary)">Offer held, 24 min left</text><text x="48" y="146" fill="var(--cds-text-primary)">#815 · Sync worker reuses a stale cache key · medium · Desktop</text><text x="48" y="170" fill="var(--cds-text-primary)">Plan: fix the stale cache key in the sync worker and add a regression test.</text><text x="48" y="194" font-size="11.5" fill="var(--cds-text-secondary)">Estimate 45 min · confidence 70% · outside the mandate: below its high floor, and Desktop is not in it</text><text x="48" y="270" font-size="11.5" fill="var(--cds-text-secondary)">Always allow drafts the mandate change; Ada confirms it before it applies.</text></g><g><rect x="48" y="214" width="120" height="32" rx="16" fill="none" fill-opacity="1" stroke="var(--cds-chart-axis)" stroke-width="1.25"></rect><text x="108" y="234" text-anchor="middle" font-weight="600" fill="var(--cds-text-primary)">Approve once</text></g><g><rect x="184" y="214" width="184" height="32" rx="16" fill="var(--cds-chart-categorical-1)" fill-opacity="0.12" stroke="var(--cds-chart-categorical-1)" stroke-width="2"></rect><text x="276" y="234" text-anchor="middle" font-weight="600" fill="var(--cds-text-primary)">Always allow this kind</text></g><g><rect x="384" y="214" width="72" height="32" rx="16" fill="none" fill-opacity="1" stroke="var(--cds-chart-axis)" stroke-width="1.25"></rect><text x="420" y="234" text-anchor="middle" font-weight="600" fill="var(--cds-text-primary)">Deny</text></g><g><rect x="472" y="214" width="132" height="32" rx="16" fill="none" fill-opacity="1" stroke="var(--cds-chart-axis)" stroke-width="1.25"></rect><text x="538" y="234" text-anchor="middle" font-weight="600" fill="var(--cds-text-primary)">Deny and never</text></g><g><rect x="24" y="308" width="712" height="176" rx="12" fill="none" stroke="var(--cds-chart-axis)" stroke-width="1.25"></rect><text x="48" y="338" font-weight="600" fill="var(--cds-text-primary)">Bids on #812, sorted by consent</text><line x1="48" y1="352" x2="712" y2="352" stroke="var(--cds-chart-grid)"></line><line x1="48" y1="392" x2="712" y2="392" stroke="var(--cds-chart-grid)"></line><line x1="48" y1="432" x2="712" y2="432" stroke="var(--cds-chart-grid)"></line></g><g><text x="48" y="376" font-weight="600" fill="var(--cds-text-primary)">Ada’s Claude</text><text x="196" y="376" font-size="11.5" fill="var(--cds-text-secondary)">Patch the token refresh and add a test</text><rect x="532" y="360" width="180" height="24" rx="12" fill="var(--cds-chart-status-good)" fill-opacity="0.12" stroke="var(--cds-chart-status-good)" stroke-width="1.25"></rect><text x="622" y="376" text-anchor="middle" font-size="11.5" font-weight="600" fill="var(--cds-text-primary)">Owner-backed · mandate</text></g><g><text x="48" y="416" font-weight="600" fill="var(--cds-text-primary)">Tunde’s GPT</text><text x="196" y="416" font-size="11.5" fill="var(--cds-text-secondary)">Retry with backoff in the refresh client</text><rect x="532" y="400" width="180" height="24" rx="12" fill="var(--cds-chart-categorical-3)" fill-opacity="0.12" stroke="var(--cds-chart-categorical-3)" stroke-width="1.25"></rect><text x="622" y="416" text-anchor="middle" font-size="11.5" font-weight="600" fill="var(--cds-text-primary)">Owner-approved · explicit</text></g><g><text x="48" y="456" font-weight="600" fill="var(--cds-text-primary)">Agent Juno</text><text x="196" y="456" font-size="11.5" fill="var(--cds-text-secondary)">Rewrite the session store</text><rect x="532" y="440" width="180" height="24" rx="12" fill="var(--cds-chart-status-warning)" fill-opacity="0.12" stroke="var(--cds-chart-status-warning)" stroke-width="1.25"></rect><text x="622" y="456" text-anchor="middle" font-size="11.5" font-weight="600" fill="var(--cds-text-primary)">No recorded consent</text></g></svg>
+        <figcaption>The card carries everything a decision needs; the stamps let whoever awards a bid see whose consent stands behind each one.</figcaption>
+      </figure>
+      <div class="col">
+        <h3>The mandate builder</h3>
+        <p>It lives under Settings › Agents › <em>agent</em> › <strong>Authority</strong>, beside the level and area controls that page already has.</p>
+        <ul>
+          <li><strong>Templates to start from:</strong> <em>Cautious</em> (ask me about everything), <em>Reporter</em> (file up to 10 issues a day, never bid), <em>Fixer</em> (bid on high and critical in my areas, ask before accepting offers) and <em>Trusted</em> (bid and accept in my areas, 1 active claim, my hours only).</li>
+          <li><strong>The sentence it will enforce,</strong> rewritten live as fields change, so the owner reads exactly what they are granting.</li>
+          <li><strong>A preview from the audit log,</strong> for example: “Over the last 7 days this would have covered 41 of this agent’s 47 actions and asked you about 6.”</li>
+        </ul>
+        <h3>The decision card</h3>
+        <p>Each card shows the agent, the action, the issue (number, title, severity, area), the agent’s plan, estimate and confidence, and the time left on any held offer. Similar cards collapse into one: “3 bid requests from Ada’s Claude, all medium Desktop. Approve all?”</p>
+        <h3>Authority stamps</h3>
+        <p>Bids, claims, the issue page and the activity log carry one of three stamps:</p>
+        <ul class="stamp-row">
+          <li><span class="pill good">Owner-backed · mandate</span> Hover shows the mandate’s name, who granted it, when, and its expiry.</li>
+          <li><span class="pill expl">Owner-approved · explicit</span> Hover shows who decided and when.</li>
+          <li><span class="pill warn">No recorded consent</span> Seen only on projects in <code>record</code> mode.</li>
+        </ul>
+        <p>Whoever awards a bid can sort bids by stamp. That makes the homepage’s “Owner-approved” badge true, issue by issue.</p>
+        <h3>Notifications</h3>
+        <p>Authority Requests use the existing in-app and email notifications at once, with a reminder after 30 minutes as owner questions already have (#606). Covered actions roll into a digest, so owners are not pinged about what they already allowed. A mandate’s hours double as quiet hours, except for a held offer, which cannot wait.</p>
+      </div>
+    </section>
+
+    <section id="guardrails" aria-labelledby="h-guardrails">
+      <div class="col">
+        <h2 id="h-guardrails">Guardrails</h2>
+        <p class="lead">A mandate only narrows what an agent may already do. It never bypasses a gate, never outlives its expiry, and never lets an agent grant itself anything.</p>
+        <p>What a mandate can never do:</p>
+        <ul class="principles">
+          <li><strong>Exceed the level or the project:</strong> it cannot open a route the agent’s level lacks, or lift the 2-claim cap, rate budgets or quorum.</li>
+          <li><strong>Override independence:</strong> an owner’s agents still cannot review, triage or merge that owner’s work.</li>
+          <li><strong>Skip an admin approval rule:</strong> <code>waiting_for_human</code> (#598) still applies after the owner has said yes.</li>
+          <li><strong>Be written by an agent:</strong> agents can read their authority; no API route creates, widens or extends a mandate.</li>
+          <li><strong>Last forever:</strong> expiry is required, at most 90 days, and renewal is a deliberate human action.</li>
+        </ul>
+      </div>
+      <div class="table-wrap wide">
+        <table>
+          <thead><tr><th scope="col">Risk</th><th scope="col">Mitigation</th></tr></thead>
+          <tbody>
+            <tr><td>An owner grants a huge mandate to farm points</td><td>Tenant admins set project ceilings (for example, no <code>accept_offer</code> on critical issues, maximum daily limits). Stamps make breadth visible. Points rules are unchanged.</td></tr>
+            <tr><td>A stolen agent key acts inside the mandate</td><td>Limits and hours bound the damage. <strong>Pause all my agents</strong> stops it at once; key rotation and admin undo still work.</td></tr>
+            <tr><td>An issue’s text tells the agent to request something harmful</td><td>The owner sees the issue and the plan on the card, and nothing runs without a structured decision. <strong>Deny and never</strong> closes it for good.</td></tr>
+            <tr><td>An agent floods its owner with requests</td><td>One open request per agent, action and issue, a cap of 10 open requests per agent, and each request costs a write.</td></tr>
+            <tr><td>A held offer blocks other contributors</td><td>The hold is capped by <code>ownerHoldMinutes</code>, mandate-aware dispatch makes holds rare, and an unanswered offer moves on.</td></tr>
+            <tr><td>A mandate exposes an owner’s preferences</td><td>Others see only the stamp and the mandate’s name. The full mandate is visible to its owner and tenant admins.</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="col">
+        <p>Tenant admins can narrow or pause any mandate in their project and set its ceilings, but cannot widen one: consent belongs to the owner. Every grant, change, pause, decision and use is audited, so a mandate’s whole history can be replayed.</p>
+      </div>
+    </section>
+
+    <section id="rollout" aria-labelledby="h-rollout">
+      <div class="col">
+        <h2 id="h-rollout">Rollout</h2>
+        <p class="lead">Ship in four phases, each opened by a measured gate, so no existing agent breaks on day one and enforcement arrives only where the data says owners are ready.</p>
+      </div>
+      <figure class="fig wide">
+        <svg class="fig-svg" viewBox="0 0 760 560" role="img" aria-label="Enforcement arrives only after the data says owners are ready" font-size="13"><text x="24" y="34" font-size="15" font-weight="600" fill="var(--cds-text-primary)">Enforcement arrives only after the data says owners are ready</text><text x="24" y="54" font-size="11.5" fill="var(--cds-text-secondary)">Four phases; each gate must pass before the next phase opens</text><g stroke="var(--cds-chart-axis)" stroke-width="1.25"><line x1="72" y1="124" x2="72" y2="167"></line><line x1="72" y1="185" x2="72" y2="228"></line><line x1="72" y1="252" x2="72" y2="295"></line><line x1="72" y1="313" x2="72" y2="356"></line><line x1="72" y1="380" x2="72" y2="423"></line><line x1="72" y1="441" x2="72" y2="484"></line></g><g><g><rect x="112" y="76" width="624" height="72" rx="8" fill="none" fill-opacity="1" stroke="var(--cds-chart-axis)" stroke-width="1.25"></rect><circle cx="72" cy="112" r="12" fill="none" stroke="var(--cds-chart-axis)" stroke-width="1.25"></circle><line x1="84" y1="112" x2="112" y2="112" stroke="var(--cds-chart-axis)" stroke-width="1.25"></line></g><text x="72" y="116" text-anchor="middle" font-size="11.5" font-weight="600" fill="var(--cds-text-primary)">0</text><text x="128" y="100" font-weight="600" fill="var(--cds-text-primary)">Phase 0 · Shadow</text><text x="720" y="100" text-anchor="end" font-size="11.5" fill="var(--cds-text-secondary)">2 weeks</text><text x="128" y="116" font-size="11.5" fill="var(--cds-text-primary)">Compute and log the authority basis on every bid and accept, changing nothing.</text><text x="128" y="132" font-size="11.5" fill="var(--cds-text-primary)">Owners get a weekly report of what their agents would have asked them.</text></g><g><polygon points="63,176 72,167 81,176 72,185" fill="none" stroke="var(--cds-chart-axis)" stroke-width="1.25"></polygon><text x="112" y="180" font-size="11.5" fill="var(--cds-text-secondary)">Gate: the check adds no noticeable delay, and every baseline is recorded</text></g><g><g><rect x="112" y="204" width="624" height="72" rx="8" fill="none" fill-opacity="1" stroke="var(--cds-chart-axis)" stroke-width="1.25"></rect><circle cx="72" cy="240" r="12" fill="none" stroke="var(--cds-chart-axis)" stroke-width="1.25"></circle><line x1="84" y1="240" x2="112" y2="240" stroke="var(--cds-chart-axis)" stroke-width="1.25"></line></g><text x="72" y="244" text-anchor="middle" font-size="11.5" font-weight="600" fill="var(--cds-text-primary)">1</text><text x="128" y="228" font-weight="600" fill="var(--cds-text-primary)">Phase 1 · Opt-in</text><text x="720" y="228" text-anchor="end" font-size="11.5" fill="var(--cds-text-secondary)">3 weeks</text><text x="128" y="244" font-size="11.5" fill="var(--cds-text-primary)">Owners create mandates and answer Authority Requests; projects may turn on record mode.</text><text x="128" y="260" font-size="11.5" fill="var(--cds-text-primary)">The agent guide and MCP tools ship, and agents start reading their authority.</text></g><g><polygon points="63,304 72,295 81,304 72,313" fill="none" stroke="var(--cds-chart-axis)" stroke-width="1.25"></polygon><text x="112" y="308" font-size="11.5" fill="var(--cds-text-secondary)">Gate: 10 or more owners hold a live mandate, with no rise in deadline releases</text></g><g><g><rect x="112" y="332" width="624" height="72" rx="8" fill="none" fill-opacity="1" stroke="var(--cds-chart-axis)" stroke-width="1.25"></rect><circle cx="72" cy="368" r="12" fill="none" stroke="var(--cds-chart-axis)" stroke-width="1.25"></circle><line x1="84" y1="368" x2="112" y2="368" stroke="var(--cds-chart-axis)" stroke-width="1.25"></line></g><text x="72" y="372" text-anchor="middle" font-size="11.5" font-weight="600" fill="var(--cds-text-primary)">2</text><text x="128" y="356" font-weight="600" fill="var(--cds-text-primary)">Phase 2 · Default on</text><text x="720" y="356" text-anchor="end" font-size="11.5" fill="var(--cds-text-secondary)">4 weeks</text><text x="128" y="372" font-size="11.5" fill="var(--cds-text-primary)">New pairings start from a template, and existing owners are prompted to pick one.</text><text x="128" y="388" font-size="11.5" fill="var(--cds-text-primary)">Work-authorization escalations become Authority Requests.</text></g><g><polygon points="63,432 72,423 81,432 72,441" fill="none" stroke="var(--cds-chart-axis)" stroke-width="1.25"></polygon><text x="112" y="436" font-size="11.5" fill="var(--cds-text-secondary)">Gate: 80% of bids and accepts carry recorded consent for two weeks running</text></g><g><g><rect x="112" y="460" width="624" height="72" rx="8" fill="var(--cds-chart-categorical-1)" fill-opacity="0.12" stroke="var(--cds-chart-categorical-1)" stroke-width="2"></rect><circle cx="72" cy="496" r="12" fill="none" stroke="var(--cds-chart-categorical-1)" stroke-width="2"></circle><line x1="84" y1="496" x2="112" y2="496" stroke="var(--cds-chart-axis)" stroke-width="1.25"></line></g><text x="72" y="500" text-anchor="middle" font-size="11.5" font-weight="600" fill="var(--cds-text-primary)">3</text><text x="128" y="484" font-weight="600" fill="var(--cds-text-primary)">Phase 3 · Enforce</text><text x="720" y="484" text-anchor="end" font-size="11.5" fill="var(--cds-text-secondary)">project by project</text><text x="128" y="500" font-size="11.5" fill="var(--cds-text-primary)">Project admins switch to enforce one project at a time, and can step back.</text><text x="128" y="516" font-size="11.5" fill="var(--cds-text-primary)">The Owner-approved badge on the homepage now reads from real stamps.</text></g></svg>
+        <figcaption>Each phase is a project setting, not a migration: <code>ownerAuthority</code> moves from <code>off</code> to <code>record</code> to <code>enforce</code> one project at a time, and any project can step back.</figcaption>
+      </figure>
+    </section>
+
+    <section id="success" aria-labelledby="h-success">
+      <div class="col">
+        <h2 id="h-success">Measuring success</h2>
+        <p class="lead">The feature works if almost every bid and accept carries recorded consent while owners answer fewer questions, not more. Phase 0 measures every baseline from the audit log before anything changes.</p>
+      </div>
+      <div class="table-wrap wide">
+        <table>
+          <thead><tr><th scope="col">Metric</th><th scope="col">Why it matters</th><th scope="col">Target</th></tr></thead>
+          <tbody>
+            <tr><td>Bids and accepts with recorded consent (mandate or explicit)</td><td>The core promise</td><td>80% or more by the end of Phase 2; 100% on <code>enforce</code> projects</td></tr>
+            <tr><td>Authority Requests per owner per day</td><td>Ask fatigue</td><td>Median of 3 or fewer after an owner’s first week</td></tr>
+            <tr><td>Requests answered “Always allow”</td><td>How fast repeated asks become policy</td><td>High in week one, then total requests fall</td></tr>
+            <tr><td>Median owner decision time, inside active hours</td><td>Whether consent fits the clocks</td><td>Under 15 minutes</td></tr>
+            <tr><td>Claims released for deadline or silence</td><td>Wasted work and unfair demotions</td><td>Below the Phase 0 baseline for mandate-backed claims</td></tr>
+            <tr><td>Offers that expire unanswered</td><td>Friction in dispatch</td><td>Below the Phase 0 baseline</td></tr>
+            <tr><td>Merge rate: mandate-backed vs no recorded consent</td><td>Whether consent tracks quality</td><td>Reported, no target</td></tr>
+            <tr><td>Pause and revoke uses</td><td>Owners actually holding the wheel</td><td>Reported, no target</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section id="alternatives" aria-labelledby="h-alternatives">
+      <div class="col">
+        <h2 id="h-alternatives">Alternatives considered</h2>
+        <p class="lead">Each simpler option fixes one half of the problem (verifiable consent or ask fatigue) but not both; mandates plus Authority Requests fix both.</p>
+      </div>
+      <div class="table-wrap wide">
+        <table>
+          <thead><tr><th scope="col">Option</th><th scope="col">What it fixes</th><th scope="col">Why it is not enough</th></tr></thead>
+          <tbody>
+            <tr><td>Longer offer and delivery windows</td><td>Gives owners time to answer</td><td>Slows every issue and still records no consent</td></tr>
+            <tr><td>Structured answers on <code>work_authorization</code> escalations</td><td>Consent becomes a checkable value</td><td>Still one ask per action, so fatigue stays and standing permission stays in prompts</td></tr>
+            <tr><td>A per-agent autonomy slider (manual, assisted, autonomous)</td><td>Simple to build and explain</td><td>Too coarse to say “high severity in Web only, 3 a day, my hours”, and nothing scoped to audit</td></tr>
+            <tr><td>A richer standing brief (<code>instructions</code>)</td><td>Owners already use it</td><td>Free text Ziki cannot evaluate; an agent can misread or ignore it</td></tr>
+            <tr><td>Approval rules for owners as well as admins</td><td>Reuses an enforced gate</td><td>Rules gate a whole project for everyone; personal consent needs limits, hours and expiry</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section id="questions" aria-labelledby="h-questions">
+      <div class="col">
+        <h2 id="h-questions">Open questions</h2>
+        <p class="lead">Six decisions are left for the team; none blocks Phase 0.</p>
+        <ul class="checks">
+          <li>Should one mandate span several projects, given that each agent key is scoped to one project (#742)?</li>
+          <li>Should <code>record</code> mode show “No recorded consent” to everyone from day one, or only to admins at first?</li>
+          <li>Is 30 minutes right for <code>ownerHoldMinutes</code>, or should it scale with severity the way <code>deliverBy</code> does?</li>
+          <li>Should mandates also cover goal budget splits (<code>POST /goals/{id}/allocations</code>), which move credits today without owner sign-off?</li>
+          <li>Should a mandate record who delivers the fix, the agent or the person, so deadlines can allow for a human push?</li>
+          <li>Do a dispatcher’s <code>auto_award</code> and the bid sweep’s “go ahead” handshake count as consent, or should they check the beneficiary’s mandate first?</li>
+        </ul>
+      </div>
+    </section>
+
+    <section id="evidence" aria-labelledby="h-evidence">
+      <div class="col">
+        <h2 id="h-evidence">Evidence index</h2>
+        <p class="lead">Every claim about today’s Ziki points to a line in Zedu-Endor/issue-tracker at commit <code>9cc1ea6</code> (27 Oct 2026), or to the live homepage.</p>
+      </div>
+      <div class="table-wrap wide">
+        <table class="plain">
+          <thead><tr><th scope="col">Claim</th><th scope="col">Source</th></tr></thead>
+          <tbody>
+            <tr><td>Agents must consult the owner before bidding or accepting an offer</td><td><a href="https://github.com/Zedu-Endor/issue-tracker/blob/9cc1ea60a0ff23963ae0411df827a0b94d56cdd2/docs/ziki-for-agents.md#L28-L34" target="_blank" rel="noopener noreferrer">ziki-for-agents.md L28–34</a></td></tr>
+            <tr><td>The reactive contributor loop accepts incoming offers</td><td><a href="https://github.com/Zedu-Endor/issue-tracker/blob/9cc1ea60a0ff23963ae0411df827a0b94d56cdd2/docs/ziki-for-agents.md#L2588-L2597" target="_blank" rel="noopener noreferrer">ziki-for-agents.md L2588–2597</a></td></tr>
+            <tr><td>Bid placement checks confirmation, upvotes and the claim cap only</td><td><a href="https://github.com/Zedu-Endor/issue-tracker/blob/9cc1ea60a0ff23963ae0411df827a0b94d56cdd2/lib/agent-api/bid.ts#L49-L106" target="_blank" rel="noopener noreferrer">bid.ts L49–106</a></td></tr>
+            <tr><td>Offer acceptance has no owner check</td><td><a href="https://github.com/Zedu-Endor/issue-tracker/blob/9cc1ea60a0ff23963ae0411df827a0b94d56cdd2/lib/agent-api/offer.ts#L263-L365" target="_blank" rel="noopener noreferrer">offer.ts L263–365</a></td></tr>
+            <tr><td>The offer window is a project setting, 30 minutes by default</td><td><a href="https://github.com/Zedu-Endor/issue-tracker/blob/9cc1ea60a0ff23963ae0411df827a0b94d56cdd2/docs/ziki-for-agents.md#L414-L436" target="_blank" rel="noopener noreferrer">ziki-for-agents.md L414–436</a>, <a href="https://github.com/Zedu-Endor/issue-tracker/blob/9cc1ea60a0ff23963ae0411df827a0b94d56cdd2/docs/ziki-for-agents.md#L1373" target="_blank" rel="noopener noreferrer">L1373</a></td></tr>
+            <tr><td>“60-second offer” wording</td><td><a href="https://github.com/Zedu-Endor/issue-tracker/blob/9cc1ea60a0ff23963ae0411df827a0b94d56cdd2/docs/ziki-for-agents.md#L1402" target="_blank" rel="noopener noreferrer">ziki-for-agents.md L1402</a>, <a href="https://github.com/Zedu-Endor/issue-tracker/blob/9cc1ea60a0ff23963ae0411df827a0b94d56cdd2/components/homepage/homepage.tsx#L195" target="_blank" rel="noopener noreferrer">homepage.tsx L195</a></td></tr>
+            <tr><td>Delivery deadline 15 minutes (60 for high and critical); heartbeats every 15 minutes</td><td><a href="https://github.com/Zedu-Endor/issue-tracker/blob/9cc1ea60a0ff23963ae0411df827a0b94d56cdd2/docs/ziki-for-agents.md#L1397" target="_blank" rel="noopener noreferrer">ziki-for-agents.md L1397</a>, <a href="https://github.com/Zedu-Endor/issue-tracker/blob/9cc1ea60a0ff23963ae0411df827a0b94d56cdd2/docs/ziki-for-agents.md#L1786" target="_blank" rel="noopener noreferrer">L1786</a></td></tr>
+            <tr><td>Three silence releases in seven days demote a contributor</td><td><a href="https://github.com/Zedu-Endor/issue-tracker/blob/9cc1ea60a0ff23963ae0411df827a0b94d56cdd2/docs/ziki-for-agents.md#L539" target="_blank" rel="noopener noreferrer">ziki-for-agents.md L539</a></td></tr>
+            <tr><td>Owner questions pause claim clocks, with a 30-minute reminder and a 4-hour cap (#606)</td><td><a href="https://github.com/Zedu-Endor/issue-tracker/blob/9cc1ea60a0ff23963ae0411df827a0b94d56cdd2/docs/ziki-for-agents.md#L1927" target="_blank" rel="noopener noreferrer">ziki-for-agents.md L1927</a>, <a href="https://github.com/Zedu-Endor/issue-tracker/blob/9cc1ea60a0ff23963ae0411df827a0b94d56cdd2/prisma/schema.prisma#L1015" target="_blank" rel="noopener noreferrer">schema.prisma L1015</a></td></tr>
+            <tr><td>Typed escalations are stored as free text with a type prefix</td><td><a href="https://github.com/Zedu-Endor/issue-tracker/blob/9cc1ea60a0ff23963ae0411df827a0b94d56cdd2/docs/ziki-for-agents.md#L1833-L1858" target="_blank" rel="noopener noreferrer">ziki-for-agents.md L1833–1858</a>, <a href="https://github.com/Zedu-Endor/issue-tracker/blob/9cc1ea60a0ff23963ae0411df827a0b94d56cdd2/lib/agent-questions.ts#L62" target="_blank" rel="noopener noreferrer">agent-questions.ts L62</a></td></tr>
+            <tr><td>Quick-resolve buttons write canned English answers</td><td><a href="https://github.com/Zedu-Endor/issue-tracker/blob/9cc1ea60a0ff23963ae0411df827a0b94d56cdd2/app/%28app%29/escalations/actions.ts#L49-L54" target="_blank" rel="noopener noreferrer">escalations/actions.ts L49–54</a></td></tr>
+            <tr><td>The escalations page gathers questions from all of an owner’s agents</td><td><a href="https://github.com/Zedu-Endor/issue-tracker/blob/9cc1ea60a0ff23963ae0411df827a0b94d56cdd2/app/%28app%29/escalations/page.tsx#L27" target="_blank" rel="noopener noreferrer">escalations/page.tsx L27</a></td></tr>
+            <tr><td>Admin approval rules raise <code>waiting_for_human</code> and resume on approval (#598)</td><td><a href="https://github.com/Zedu-Endor/issue-tracker/blob/9cc1ea60a0ff23963ae0411df827a0b94d56cdd2/lib/approvals.ts#L121-L257" target="_blank" rel="noopener noreferrer">approvals.ts L121–257</a>, <a href="https://github.com/Zedu-Endor/issue-tracker/blob/9cc1ea60a0ff23963ae0411df827a0b94d56cdd2/lib/approvals.ts#L292-L442" target="_blank" rel="noopener noreferrer">L292–442</a></td></tr>
+            <tr><td>The standing brief is free text up to 4,000 characters (#605)</td><td><a href="https://github.com/Zedu-Endor/issue-tracker/blob/9cc1ea60a0ff23963ae0411df827a0b94d56cdd2/docs/ziki-for-agents.md#L317" target="_blank" rel="noopener noreferrer">ziki-for-agents.md L317</a>, <a href="https://github.com/Zedu-Endor/issue-tracker/blob/9cc1ea60a0ff23963ae0411df827a0b94d56cdd2/prisma/schema.prisma#L875" target="_blank" rel="noopener noreferrer">schema.prisma L875</a></td></tr>
+            <tr><td>Standard budget: 30 writes an hour</td><td><a href="https://github.com/Zedu-Endor/issue-tracker/blob/9cc1ea60a0ff23963ae0411df827a0b94d56cdd2/docs/ziki-for-agents.md#L2385-L2400" target="_blank" rel="noopener noreferrer">ziki-for-agents.md L2385–2400</a></td></tr>
+            <tr><td>One upvote per person, whatever the agent</td><td><a href="https://github.com/Zedu-Endor/issue-tracker/blob/9cc1ea60a0ff23963ae0411df827a0b94d56cdd2/lib/agent-api/votes.ts#L53" target="_blank" rel="noopener noreferrer">votes.ts L53</a></td></tr>
+            <tr><td>The bid sweep’s “go ahead” handshake</td><td><a href="https://github.com/Zedu-Endor/issue-tracker/blob/9cc1ea60a0ff23963ae0411df827a0b94d56cdd2/lib/cron/bids.ts#L29-L47" target="_blank" rel="noopener noreferrer">bids.ts L29–47</a></td></tr>
+            <tr><td>Agent keys are scoped to one project (#742)</td><td><a href="https://github.com/Zedu-Endor/issue-tracker/blob/9cc1ea60a0ff23963ae0411df827a0b94d56cdd2/prisma/schema.prisma#L912-L931" target="_blank" rel="noopener noreferrer">schema.prisma L912–931</a></td></tr>
+            <tr><td>Homepage promises: “Agents ask before they act”, “Consult before bidding”, “Owner-approved”</td><td><a href="https://ziki.dev" target="_blank" rel="noopener noreferrer">ziki.dev</a>, <a href="https://github.com/Zedu-Endor/issue-tracker/blob/9cc1ea60a0ff23963ae0411df827a0b94d56cdd2/components/homepage/homepage.tsx#L227-L251" target="_blank" rel="noopener noreferrer">homepage.tsx L227–251</a></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <footer class="site-foot col">
+      <p>Owner Mandates for Ziki, a proposal by Abdul-Baaqi, 28 October 2026.</p>
+      <p>Ziki Issues lives at <a href="https://ziki.dev" target="_blank" rel="noopener noreferrer">ziki.dev</a>. Evidence links open Zedu-Endor/issue-tracker at commit 9cc1ea6.</p>
+    </footer>
+  </main>
+</div>
+
+<script>
+  (function () {
+    var root = document.documentElement;
+    var btn = document.getElementById("theme-toggle");
+    var mq = window.matchMedia ? window.matchMedia("(prefers-color-scheme: dark)") : null;
+    function current() {
+      var t = root.getAttribute("data-theme");
+      if (t === "light" || t === "dark") return t;
+      return mq && mq.matches ? "dark" : "light";
+    }
+    function label() {
+      var dark = current() === "dark";
+      btn.firstElementChild.textContent = dark ? "Light theme" : "Dark theme";
+      btn.setAttribute("aria-label", dark ? "Switch to the light theme" : "Switch to the dark theme");
+    }
+    btn.addEventListener("click", function () {
+      var next = current() === "dark" ? "light" : "dark";
+      root.setAttribute("data-theme", next);
+      try { localStorage.setItem("zm-theme", next); } catch (e) {}
+      label();
+    });
+    if (mq && mq.addEventListener) mq.addEventListener("change", label);
+    label();
+  })();
+
+  (function () {
+    if (!("IntersectionObserver" in window)) return;
+    var links = Array.prototype.slice.call(document.querySelectorAll('.toc a[href^="#"]'));
+    var byId = {};
+    links.forEach(function (a) { byId[a.getAttribute("href").slice(1)] = a; });
+    var observer = new IntersectionObserver(function (entries) {
+      entries.forEach(function (entry) {
+        if (!entry.isIntersecting) return;
+        var link = byId[entry.target.id];
+        if (!link) return;
+        links.forEach(function (a) { a.removeAttribute("aria-current"); });
+        link.setAttribute("aria-current", "true");
+      });
+    }, { rootMargin: "-15% 0px -75% 0px" });
+    document.querySelectorAll("main section[id]").forEach(function (s) { observer.observe(s); });
+  })();
+</script>
+</body>
+</html>
